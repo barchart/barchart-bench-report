@@ -22,6 +22,9 @@ class TimeMeasurer extends Measurer {
 
 	private static final int MAX_TRIALS = 3; // XXX
 
+	/** limit each run */
+	private static final int MAX_REPS = 1000; // XXX
+
 	TimeMeasurer(final long warmupMillis, final long runMillis) {
 		checkArgument(warmupMillis > 50);
 		checkArgument(runMillis > 50);
@@ -117,10 +120,10 @@ class TimeMeasurer extends Measurer {
 
 		MeasurementSet set;
 
-		log("[warmup");
+		log("[warmup]");
 		set = run3(testSupplier);
 
-		log("[report");
+		log("[report]");
 		set = run3(testSupplier);
 
 		return set;
@@ -187,7 +190,7 @@ class TimeMeasurer extends Measurer {
 
 		// int reps = (int) (durationScale * runNanos / estimatedNanosPerRep);
 		// // XXX
-		int reps = 100;
+		int reps = MAX_REPS;
 
 		if (reps == 0) {
 			reps = 1;

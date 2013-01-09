@@ -36,6 +36,10 @@ public class HazelBase extends BenchBase implements LifecycleListener {
 		return BenchUtil.valueList("100,200,400");
 	}
 
+	protected static List<String> delayList() {
+		return BenchUtil.valueList("0,10");
+	}
+
 	private final BlockingQueue<LifecycleEvent> //
 	eventQueue = new LinkedBlockingQueue<LifecycleEvent>();
 

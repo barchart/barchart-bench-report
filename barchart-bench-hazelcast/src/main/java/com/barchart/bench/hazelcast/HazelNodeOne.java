@@ -36,7 +36,7 @@ public class HazelNodeOne extends HazelBase {
 
 	private HazelcastInstance hazel;
 	private IMap<String, String> hazelMap;
-	private int[] keyIndex;
+	private int[] randomIndex;
 	private String[] keySet;
 
 	@Override
@@ -54,16 +54,14 @@ public class HazelNodeOne extends HazelBase {
 
 		hazelMap = hazel.getMap("default");
 
-		final Map<String, String> bootMap = HazelUtil.randomMap(mapSize,
+		randomIndex = HazelUtil.randomIndex(mapSize);
+
+		final Map<String, String> randomMap = HazelUtil.randomMap(mapSize,
 				keySize, valueSize);
 
-		keyIndex = HazelUtil.randomIndex(mapSize);
+		keySet = randomMap.keySet().toArray(new String[0]);
 
-		keySet = bootMap.keySet().toArray(new String[0]);
-
-		keyIndex = HazelUtil.randomIndex(mapSize);
-
-		hazelMap.putAll(bootMap);
+		hazelMap.putAll(randomMap);
 
 	}
 
@@ -82,13 +80,26 @@ public class HazelNodeOne extends HazelBase {
 
 	private String store;
 
+	private String randomKey(final int rep) {
+		final int k = rep % mapSize;
+		final int index = randomIndex[k];
+		final String key = keySet[index];
+		return key;
+	}
+
 	public void timeGet(final int reps) throws Exception {
 		for (int r = 0; r < reps; r++) {
-			final int k = r % mapSize;
-			final int index = keyIndex[k];
-			final String key = keySet[index];
+			final String key = randomKey(r);
 			final String value = hazelMap.get(key);
 			store = value;
+		}
+	}
+
+	public void timePut(final int reps) throws Exception {
+		final String value = HazelUtil.randomString(valueSize);
+		for (int r = 0; r < reps; r++) {
+			final String key = randomKey(r);
+			hazelMap.put(key, value);
 		}
 	}
 
