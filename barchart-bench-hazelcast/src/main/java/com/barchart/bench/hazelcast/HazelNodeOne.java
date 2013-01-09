@@ -11,27 +11,27 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import com.hazelcast.core.LifecycleEvent.LifecycleState;
 
-public class HazelNodeOne extends HazelBase {
+public class HazelNodeOne extends HazelBaseOne {
 
 	@Param
 	private int mapSize;
 
 	protected static List<String> mapSizeValues() {
-		return HazelBase.mapList();
+		return HazelBaseOne.mapList();
 	}
 
 	@Param
 	private int keySize;
 
 	protected static List<String> keySizeValues() {
-		return HazelBase.keyList();
+		return HazelBaseOne.keyList();
 	}
 
 	@Param
 	private int valueSize;
 
 	protected static List<String> valueSizeValues() {
-		return HazelBase.valueList();
+		return HazelBaseOne.valueList();
 	}
 
 	private HazelcastInstance hazel;
@@ -42,7 +42,7 @@ public class HazelNodeOne extends HazelBase {
 	@Override
 	protected void setUp() throws Exception {
 
-		log.info("init");
+		log.info("@@@ init");
 
 		final Config config = new Config();
 
@@ -52,7 +52,11 @@ public class HazelNodeOne extends HazelBase {
 
 		await(LifecycleState.STARTED);
 
+		log.info("@@@ join");
+
 		hazelMap = hazel.getMap("default");
+
+		log.info("@@@ map");
 
 		randomIndex = HazelUtil.randomIndex(mapSize);
 
@@ -63,12 +67,18 @@ public class HazelNodeOne extends HazelBase {
 
 		hazelMap.putAll(randomMap);
 
+		log.info("@@@ load");
+
 		HazelUtil.warmup(hazelMap);
+
+		log.info("@@@ start");
 
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
+
+		log.info("@@@ finish");
 
 		hazel.getLifecycleService().shutdown();
 
@@ -76,7 +86,7 @@ public class HazelNodeOne extends HazelBase {
 
 		listenOff(hazel);
 
-		log.info("done");
+		log.info("@@@ done");
 
 	}
 
@@ -107,7 +117,7 @@ public class HazelNodeOne extends HazelBase {
 
 	public static void main(final String... args) throws Exception {
 		new HazelNodeOne().execute( //
-				// "--debug" //
+				"--debug" //
 				);
 	}
 

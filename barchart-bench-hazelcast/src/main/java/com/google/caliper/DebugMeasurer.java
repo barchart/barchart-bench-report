@@ -36,6 +36,8 @@ class DebugMeasurer extends Measurer {
 	public MeasurementSet run(final Supplier<ConfiguredBenchmark> testSupplier)
 			throws Exception {
 
+		System.out.println("### reps=" + reps);
+
 		final ConfiguredBenchmark benchmark = testSupplier.get();
 		benchmark.run(reps);
 		benchmark.close();

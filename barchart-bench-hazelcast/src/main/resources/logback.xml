@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="false">
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date{sss.SSS} [%5.5thread] %-5level %16.16class{16} %-16.16method{16} %3.3line - %message%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="debug">
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<logger name="com.hazelcast.impl" level="info" />
+	<logger name="com.hazelcast.nio" level="info" />
+
+</configuration>

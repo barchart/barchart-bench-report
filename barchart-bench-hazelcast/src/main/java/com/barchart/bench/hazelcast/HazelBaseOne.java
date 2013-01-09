@@ -12,7 +12,7 @@ import com.hazelcast.core.LifecycleEvent;
 import com.hazelcast.core.LifecycleEvent.LifecycleState;
 import com.hazelcast.core.LifecycleListener;
 
-public class HazelBase extends BenchBase implements LifecycleListener {
+public class HazelBaseOne extends BenchBase implements LifecycleListener {
 
 	static {
 
