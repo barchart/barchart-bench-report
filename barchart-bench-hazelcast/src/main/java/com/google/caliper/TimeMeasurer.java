@@ -115,6 +115,21 @@ class TimeMeasurer extends Measurer {
 	public MeasurementSet run(final Supplier<ConfiguredBenchmark> testSupplier)
 			throws Exception {
 
+		MeasurementSet set;
+
+		log("[warmup");
+		set = run3(testSupplier);
+
+		log("[report");
+		set = run3(testSupplier);
+
+		return set;
+
+	}
+
+	public MeasurementSet runXXX(
+			final Supplier<ConfiguredBenchmark> testSupplier) throws Exception {
+
 		final double estimatedNanosPerRep = warmUp(testSupplier);
 
 		log("[measuring nanos per rep with scale 1.00]");
@@ -129,23 +144,36 @@ class TimeMeasurer extends Measurer {
 		final Measurement measurement150 = measure(testSupplier, 1.50,
 				measurement100.getRaw());
 
-		final MeasurementSet measurementSet = new MeasurementSet(
-				measurement100, measurement050, measurement150);
+		MeasurementSet measurementSet = new MeasurementSet(measurement100,
+				measurement050, measurement150);
 
-		// for (int i = 3; i < MAX_TRIALS; i++) {
-		// final double threshold = SHORT_CIRCUIT_TOLERANCE
-		// * measurementSet.meanRaw();
-		// if (measurementSet.standardDeviationRaw() < threshold) {
-		// return measurementSet;
-		// }
-		//
-		// log("[performing additional measurement with scale 1.00]");
-		// final Measurement measurement = measure(testSupplier, 1.00,
-		// measurement100.getRaw());
-		// measurementSet = measurementSet.plusMeasurement(measurement);
-		// }
+		for (int i = 3; i < MAX_TRIALS; i++) {
+			final double threshold = SHORT_CIRCUIT_TOLERANCE
+					* measurementSet.meanRaw();
+			if (measurementSet.standardDeviationRaw() < threshold) {
+				return measurementSet;
+			}
+
+			log("[performing additional measurement with scale 1.00]");
+			final Measurement measurement = measure(testSupplier, 1.00,
+					measurement100.getRaw());
+			measurementSet = measurementSet.plusMeasurement(measurement);
+		}
 
 		return measurementSet;
+	}
+
+	public MeasurementSet run3(final Supplier<ConfiguredBenchmark> testSupplier)
+			throws Exception {
+
+		final Measurement m1 = measure(testSupplier, 1.00, 0);
+		final Measurement m2 = measure(testSupplier, 1.00, 0);
+		final Measurement m3 = measure(testSupplier, 1.00, 0);
+
+		final MeasurementSet measurementSet = new MeasurementSet(m1, m2, m3);
+
+		return measurementSet;
+
 	}
 
 	/**
@@ -159,7 +187,7 @@ class TimeMeasurer extends Measurer {
 
 		// int reps = (int) (durationScale * runNanos / estimatedNanosPerRep);
 		// // XXX
-		int reps = 1000;
+		int reps = 100;
 
 		if (reps == 0) {
 			reps = 1;

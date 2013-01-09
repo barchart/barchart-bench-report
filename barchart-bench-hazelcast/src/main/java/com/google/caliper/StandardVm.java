@@ -2,7 +2,6 @@ package com.google.caliper;
 
 import java.util.List;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 /**
@@ -13,11 +12,8 @@ final class StandardVm extends Vm {
 	@Override
 	public List<String> getVmSpecificOptions(final MeasurementType type,
 			final Arguments arguments) {
-		if (!arguments.getCaptureVmLog()) {
-			return ImmutableList.of();
-		}
 
-		final List<String> result = Lists.newArrayList( //
+		final List<String> options = Lists.newArrayList( //
 				"-Xms1024m", //
 				"-Xmx1024m",//
 				"-XX:MaxDirectMemorySize=1024m", //
@@ -29,7 +25,7 @@ final class StandardVm extends Vm {
 				"-server" //
 		);
 
-		return result;
+		return options;
 	}
 
 	/** java executable name */
