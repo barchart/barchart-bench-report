@@ -36,4 +36,15 @@ public class HazelUtil {
 		return new String(array, UTF_8);
 	}
 
+	private static String store;
+
+	public static void warmup(final Map<String, String> map) {
+		for (final String key : map.keySet()) {
+			store = map.get(key);
+		}
+		for (final String value : map.values()) {
+			store = value;
+		}
+	}
+
 }

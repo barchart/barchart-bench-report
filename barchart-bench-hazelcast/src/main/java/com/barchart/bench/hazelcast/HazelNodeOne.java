@@ -63,6 +63,8 @@ public class HazelNodeOne extends HazelBase {
 
 		hazelMap.putAll(randomMap);
 
+		HazelUtil.warmup(hazelMap);
+
 	}
 
 	@Override
