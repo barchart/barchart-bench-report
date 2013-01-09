@@ -6,8 +6,9 @@ public class TestHazelNodeTwo {
 
 	@Test
 	public void run() throws Exception {
+
 		new HazelNodeTwo().execute();
-		HazelNodeTwo.done();
+
 	}
 
 }

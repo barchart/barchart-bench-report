@@ -5,7 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.hazelcast.config.Config;
+import com.hazelcast.config.Join;
+
 public class HazelUtil {
+
+	private final static Logger log = LoggerFactory.getLogger(HazelUtil.class);
 
 	public static Map<String, String> randomMap(final int mapSize,
 			final int keySzie, final int valueSize) {
@@ -39,12 +47,33 @@ public class HazelUtil {
 	private static String store;
 
 	public static void warmup(final Map<String, String> map) {
+		int index = 0;
 		for (final String key : map.keySet()) {
 			store = map.get(key);
+			if (index % 1000 == 0) {
+				log.info("warm up index : {}", index);
+			}
+			index++;
 		}
-		for (final String value : map.values()) {
-			store = value;
-		}
+	}
+
+	public static Config serverConfig() {
+
+		final Config config = new Config();
+
+		config.setProperty("hazelcast.socket.bind.any", "false");
+
+		final Join join = config.getNetworkConfig().getJoin();
+		join.getAwsConfig().setEnabled(false);
+		join.getMulticastConfig().setEnabled(false);
+		join.getTcpIpConfig().setEnabled(true);
+		join.getTcpIpConfig().addMember("hazel-01");
+		join.getTcpIpConfig().addMember("hazel-02");
+
+		config.getNetworkConfig().setPort(12345);
+		config.getNetworkConfig().setPortAutoIncrement(false);
+
+		return config;
 	}
 
 }

@@ -23,7 +23,7 @@ class TimeMeasurer extends Measurer {
 	private static final int MAX_TRIALS = 3; // XXX
 
 	/** limit each run */
-	private static final int MAX_REPS = 1000; // XXX
+	private static final int MAX_REPS = 100; // XXX
 
 	TimeMeasurer(final long warmupMillis, final long runMillis) {
 		checkArgument(warmupMillis > 50);

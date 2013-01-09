@@ -32,21 +32,40 @@ public class HazelNodeTwo extends HazelBaseTwo {
 		}
 	}
 
+	public void timePutOne(final int reps) {
+		final String value = HazelUtil.randomString(valueSize);
+		for (int r = 0; r < reps; r++) {
+			final String key = randomKey(r);
+			hazelMapOne.put(key, value);
+		}
+	}
+
+	public void timePutTwo(final int reps) {
+		final String value = HazelUtil.randomString(valueSize);
+		for (int r = 0; r < reps; r++) {
+			final String key = randomKey(r);
+			hazelMapTwo.put(key, value);
+		}
+	}
+
 	@Override
 	protected void setUp() throws Exception {
+		HazelBaseTwo.showtime();
 		TrafficControl.delay(latency);
 	}
 
 	@Override
 	protected void tearDown() throws Exception {
 		TrafficControl.delay(0);
+		HazelBaseTwo.shutdown();
 	}
 
 	public static void main(final String... args) throws Exception {
+
 		new HazelNodeTwo().execute( //
 				"--debug" //
 				);
-		HazelNodeTwo.done();
+
 	}
 
 }
