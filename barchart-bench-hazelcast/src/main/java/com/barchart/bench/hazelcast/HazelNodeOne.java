@@ -46,14 +46,14 @@ public class HazelNodeOne extends HazelBase {
 
 		hazelMap = hazel.getMap("default");
 
-		final Map<String, String> bootMap = Util.randomMap(mapSize, keySize,
+		final Map<String, String> bootMap = HazelUtil.randomMap(mapSize, keySize,
 				valueSize);
 
-		keyIndex = Util.randomIndex(mapSize);
+		keyIndex = HazelUtil.randomIndex(mapSize);
 
 		keySet = bootMap.keySet().toArray(new String[0]);
 
-		keyIndex = Util.randomIndex(mapSize);
+		keyIndex = HazelUtil.randomIndex(mapSize);
 
 		hazelMap.putAll(bootMap);
 

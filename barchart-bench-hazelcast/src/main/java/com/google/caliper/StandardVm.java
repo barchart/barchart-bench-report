@@ -14,9 +14,8 @@ final class StandardVm extends Vm {
 			final Arguments arguments) {
 
 		final List<String> options = Lists.newArrayList( //
-				"-Xms1024m", //
-				"-Xmx1024m",//
-				"-XX:MaxDirectMemorySize=1024m", //
+				"-Xms2048m", //
+				"-Xmx2048m",//
 				"-verbose:gc", //
 				"-XX:+UseSerialGC", //
 				"-Xbatch", //
