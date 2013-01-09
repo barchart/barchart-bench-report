@@ -5,9 +5,11 @@ import java.util.Map;
 
 import com.google.caliper.Param;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.ListenerConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
+import com.hazelcast.core.LifecycleEvent.LifecycleState;
 
 public class HazelNodeOne extends HazelBase {
 
@@ -40,14 +42,20 @@ public class HazelNodeOne extends HazelBase {
 	@Override
 	protected void setUp() throws Exception {
 
-		final Config hazelConf = new Config();
+		log.info("init");
 
-		hazel = Hazelcast.newHazelcastInstance(hazelConf);
+		final Config config = new Config();
+
+		config.addListenerConfig(new ListenerConfig(this));
+
+		hazel = Hazelcast.newHazelcastInstance(config);
+
+		await(LifecycleState.STARTED);
 
 		hazelMap = hazel.getMap("default");
 
-		final Map<String, String> bootMap = HazelUtil.randomMap(mapSize, keySize,
-				valueSize);
+		final Map<String, String> bootMap = HazelUtil.randomMap(mapSize,
+				keySize, valueSize);
 
 		keyIndex = HazelUtil.randomIndex(mapSize);
 
@@ -64,6 +72,12 @@ public class HazelNodeOne extends HazelBase {
 
 		hazel.getLifecycleService().shutdown();
 
+		await(LifecycleState.SHUTDOWN);
+
+		listenOff(hazel);
+
+		log.info("done");
+
 	}
 
 	private String store;
@@ -79,7 +93,9 @@ public class HazelNodeOne extends HazelBase {
 	}
 
 	public static void main(final String... args) throws Exception {
-		new HazelNodeOne().execute();
+		new HazelNodeOne().execute( //
+				// "--debug" //
+				);
 	}
 
 }
